@@ -4,6 +4,7 @@ import pandas as pd
 from pandas.api.types import is_numeric_dtype
 
 from case_attribute_discovery.config import EventLogIDs
+from pix_utils.statistics.distribution import get_best_fitting_distribution
 
 
 def discover_case_attributes(event_log: pd.DataFrame, log_ids: EventLogIDs, confidence_threshold: float = 1.0) -> list:
@@ -43,6 +44,7 @@ def discover_case_attributes(event_log: pd.DataFrame, log_ids: EventLogIDs, conf
                     values[main_attribute] += 1
                 # Relativize frequencies
                 num_cases = len(event_log[log_ids.case].unique())
+                # Add case attribute specification
                 case_attributes += [{
                     'name': attribute,
                     'type': "discrete",
@@ -51,7 +53,18 @@ def discover_case_attributes(event_log: pd.DataFrame, log_ids: EventLogIDs, conf
                     ]
                 }]
             else:  # Continuous variable
-                pass  # TODO
+                # Get data distribution
+                data = []
+                for case_id, frequencies in attribute_distribution.groupby(level=0):
+                    data += [frequencies.idxmax()[1]]  # Second element of the index (attribute value) with the highest frequency
+                # Fit data best distribution
+                best_distribution = get_best_fitting_distribution(data)
+                # Add case attribute specification
+                case_attributes += [{
+                    'name': attribute,
+                    'type': "continuous",
+                    'values': best_distribution.to_prosimos_distribution()
+                }]
     # Return list with discovered case attributes
     return case_attributes
 
