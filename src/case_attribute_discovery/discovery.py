@@ -7,26 +7,35 @@ from case_attribute_discovery.config import EventLogIDs
 from pix_utils.statistics.distribution import get_best_fitting_distribution
 
 
-def discover_case_attributes(event_log: pd.DataFrame, log_ids: EventLogIDs, confidence_threshold: float = 1.0) -> list:
+def discover_case_attributes(
+        event_log: pd.DataFrame,
+        log_ids: EventLogIDs,
+        avoid_columns: list = None,
+        confidence_threshold: float = 1.0
+) -> list:
     """
     Get the attributes in the event log that could be a case attribute, i.e. those attributes which value is fixed through all the process
     case.
 
     :param event_log:               event log to analyze.
     :param log_ids:                 mapping for the IDs of the columns in the event log.
-    :param confidence_threshold:    confidence value for an attribute to be considered a case attribute (average percentage of events within a case where
-                                    the value can be different).
+    :param avoid_columns:           list of columns to not consider during the analysis.
+    :param confidence_threshold:    confidence value for an attribute to be considered a case attribute (average percentage of events within
+                                    a case where the value can be different). By default, 1.0, meaning the value cannot change within each
+                                    trace.
 
     :return: a list with the IDs of the columns detected as case attributes, their type (discrete/continuous) and the values they take.
     """
-    # Initialize case attributes
+    # Get columns to analyze
+    if avoid_columns is None:
+        avoid_columns = [log_ids.case, log_ids.activity, log_ids.start_time, log_ids.end_time, log_ids.resource]
     columns = [
         column
         for column in event_log.columns
-        if column not in [log_ids.case, log_ids.activity, log_ids.start_time, log_ids.end_time]
+        if column not in avoid_columns
     ]
-    case_attributes = []
     # Go over the columns of the event log to check if any attribute is not changing through the traces
+    case_attributes = []
     for attribute in columns:
         # Get distribution of attribute values among cases
         attribute_distribution = event_log.groupby([log_ids.case, attribute]).size()
