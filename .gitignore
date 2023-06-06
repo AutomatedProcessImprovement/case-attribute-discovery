@@ -130,3 +130,5 @@ dmypy.json
 
 # Custom
 .idea
+
+poetry.lock
