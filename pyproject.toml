@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "case-attribute-discovery"
-version = "0.1.5"
+version = "0.1.6"
 description = ""
 authors = ["David Chapela de la Campa <david.chapela.delacampa@gmail.com>"]
 readme = "README.md"
