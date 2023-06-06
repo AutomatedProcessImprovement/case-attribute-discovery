@@ -59,6 +59,10 @@ jobs:
           name: case-attribute-discovery-${{ steps.get_version.outputs.version }}-py${{ matrix.python-version }}
           path: dist
 
+      - name: Exit if not on main
+        if: github.ref != 'refs/heads/main'
+        run: exit 0
+
       - name: Generate changelog
         run: |
           echo "# Changelog" > CHANGELOG.md
