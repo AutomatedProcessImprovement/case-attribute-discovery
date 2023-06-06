@@ -1,5 +1,9 @@
 # Case Attribute Discovery
 
+![case-attribute-discovery](https://github.com/AutomatedProcessImprovement/case-attribute-discovery/actions/workflows/build.yaml/badge.svg)
+![version](https://img.shields.io/github/v/tag/AutomatedProcessImprovement/case-attribute-discovery)
+
+
 Python package to discover case attributes from an event log and their value distribution (stochastic if discrete, probability distribution
 if continuous).
 
