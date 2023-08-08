@@ -1,3 +1,7 @@
+🚨 This repository is now a subpackage of `pix-framework.discovery`, https://github.com/AutomatedProcessImprovement/pix-framework/tree/main/src/pix_framework/discovery/case_attribute_discovery.
+
+---
+
 # Case Attribute Discovery
 
 ![case-attribute-discovery](https://github.com/AutomatedProcessImprovement/case-attribute-discovery/actions/workflows/build.yaml/badge.svg)
